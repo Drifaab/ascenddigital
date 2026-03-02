@@ -1,12 +1,13 @@
-'use client'
-
 import { motion } from 'framer-motion'
-import Link from 'next/link'
 import { ArrowRight, TrendingUp, Zap, Target } from 'lucide-react'
 import { heroStats } from '@/lib/data'
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
 
-export function Hero() {
+export default function Hero() {
+  const handleNavClick = (href: string) => {
+    window.location.hash = href
+  }
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white pt-20">
       <div className="absolute inset-0 opacity-[0.02]"><div className="absolute inset-0" style={{ backgroundImage: `radial-gradient(circle at 1px 1px, #1A1A1A 1px, transparent 0)`, backgroundSize: '40px 40px' }} /></div>
@@ -23,11 +24,11 @@ export function Hero() {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-ascend-black leading-[1.1]">Digital tillväxt<br /><span className="text-ascend-orange">datadriven</span><br />agilitet</h1>
             <p className="text-lg md:text-xl text-ascend-gray-500 max-w-lg leading-relaxed">Vi bygger, optimerar och skalar din digitala närvaro med ett agilt arbetssätt.</p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/case" className="inline-flex items-center justify-center px-6 py-3 bg-ascend-orange text-white text-sm font-medium rounded-lg hover:bg-ascend-orange/90 transition-colors group">Se våra case<ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" /></Link>
-              <Link href="/om-oss" className="inline-flex items-center justify-center px-6 py-3 bg-white text-ascend-black text-sm font-medium rounded-lg border border-ascend-gray-200 hover:bg-ascend-gray-50 transition-colors">Läs om vår process</Link>
+              <button onClick={() => handleNavClick('#case')} className="inline-flex items-center justify-center px-6 py-3 bg-ascend-orange text-white text-sm font-medium rounded-lg hover:bg-ascend-orange/90 transition-colors group">Se våra case<ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" /></button>
+              <button onClick={() => handleNavClick('#process')} className="inline-flex items-center justify-center px-6 py-3 bg-white text-ascend-black text-sm font-medium rounded-lg border border-ascend-gray-200 hover:bg-ascend-gray-50 transition-colors">Läs om vår process</button>
             </div>
             <motion.div className="flex flex-wrap gap-6 md:gap-8 pt-6 md:pt-8 border-t border-ascend-gray-100" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.4 }}>
-              {heroStats.slice(0, 3).map((stat, index) => (<div key={index} className="space-y-1"><p className="text-2xl md:text-3xl font-bold text-ascend-black"><AnimatedCounter value={stat.value} /></p><p className="text-sm text-ascend-gray-500">{stat.label}</p></div>))}
+              {heroStats.slice(0, 3).map((stat: typeof heroStats[0], index: number) => (<div key={index} className="space-y-1"><p className="text-2xl md:text-3xl font-bold text-ascend-black"><AnimatedCounter value={stat.value} /></p><p className="text-sm text-ascend-gray-500">{stat.label}</p></div>))}
             </motion.div>
           </motion.div>
 

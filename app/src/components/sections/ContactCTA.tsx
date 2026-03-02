@@ -1,10 +1,11 @@
-'use client'
-
 import { motion } from 'framer-motion'
-import Link from 'next/link'
 import { ArrowRight, Mail } from 'lucide-react'
 
-export function ContactCTA() {
+export default function ContactCTA() {
+  const handleNavClick = (href: string) => {
+    window.location.hash = href
+  }
+
   return (
     <section className="py-20 md:py-32 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,8 +18,8 @@ export function ContactCTA() {
               <p className="mt-4 text-lg text-ascend-gray-600">Låt oss diskutera hur vi kan hjälpa dig att uppnå dina mål. Boka ett kostnadsfritt samtal idag.</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/kontakt" className="inline-flex items-center justify-center px-8 py-4 bg-ascend-orange text-white font-medium rounded-lg hover:bg-ascend-orange/90 transition-colors group"><Mail className="w-5 h-5 mr-2" />Kontakta oss<ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" /></Link>
-              <Link href="/case" className="inline-flex items-center justify-center px-8 py-4 bg-white text-ascend-black font-medium rounded-lg border border-ascend-gray-200 hover:bg-ascend-gray-50 transition-colors">Se våra case</Link>
+              <button onClick={() => handleNavClick('#contact')} className="inline-flex items-center justify-center px-8 py-4 bg-ascend-orange text-white font-medium rounded-lg hover:bg-ascend-orange/90 transition-colors group"><Mail className="w-5 h-5 mr-2" />Kontakta oss<ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" /></button>
+              <button onClick={() => handleNavClick('#case')} className="inline-flex items-center justify-center px-8 py-4 bg-white text-ascend-black font-medium rounded-lg border border-ascend-gray-200 hover:bg-ascend-gray-50 transition-colors">Se våra case</button>
             </div>
           </div>
         </motion.div>

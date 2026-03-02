@@ -1,11 +1,9 @@
-'use client'
-
 import { useEffect, useRef, useState } from 'react'
 import { parseCounterValue } from '@/lib/utils'
 
 // Custom useInView hook using IntersectionObserver
 function useInView(
-  ref: React.RefObject<Element>,
+  ref: React.RefObject<Element | null>,
   options?: { once?: boolean; margin?: string }
 ): boolean {
   const [isInView, setIsInView] = useState(false)
@@ -42,7 +40,7 @@ interface AnimatedCounterProps { value: string; duration?: number; className?: s
 
 export function AnimatedCounter({ value, duration = 2, className }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px' })
+  const isInView = useInView(ref as React.RefObject<Element>, { once: true, margin: '-50px' })
   const [displayValue, setDisplayValue] = useState('0')
   const { num, suffix, prefix } = parseCounterValue(value)
   const hasDecimal = value.includes('.') || value.includes(',')

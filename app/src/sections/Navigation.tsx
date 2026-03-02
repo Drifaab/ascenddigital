@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Menu, X, Search, Share2, Code2, RefreshCw, TrendingUp, ArrowRight, ChevronDown, Layers } from 'lucide-react';
+import { Menu, X, Search, Share2, Code2, RefreshCw, TrendingUp, ArrowRight, ChevronDown } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ServicesDropdown } from '@/components/ServicesDropdown';
 import { CaseDropdown } from '@/components/CaseDropdown';

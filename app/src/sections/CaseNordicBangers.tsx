@@ -1,5 +1,4 @@
 import { ArrowLeft, TrendingUp, Zap, ShoppingCart, RefreshCw, Sparkles, Mail, BarChart3 } from 'lucide-react';
-import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 
 interface CaseNordicBangersProps {
   onNavigate: (href: string) => void;

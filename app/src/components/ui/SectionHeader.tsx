@@ -1,9 +1,7 @@
-'use client'
-
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
-import { Badge } from './Badge'
-import { SectionHeaderProps } from '@/lib/types'
+import { Badge } from './badge'
+import type { SectionHeaderProps } from '@/lib/types'
 
 export function SectionHeader({ badge, badgeIcon, title, highlight, description, align = 'left' }: SectionHeaderProps) {
   return (
