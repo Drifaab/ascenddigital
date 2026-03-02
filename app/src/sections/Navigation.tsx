@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Menu, X, Search, Share2, Code2, RefreshCw, TrendingUp, ArrowRight, ChevronDown } from 'lucide-react';
+import { Menu, X, Search, Share2, Code2, RefreshCw, TrendingUp, ArrowRight, ChevronDown, Layers } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ServicesDropdown } from '@/components/ServicesDropdown';
 import { CaseDropdown } from '@/components/CaseDropdown';
@@ -42,29 +42,29 @@ const cases = [
     image: '/images/case-nordic-fulfillment.jpg',
     title: 'Nordic Fulfillment',
     result: '1000% ökning',
-    description: 'Optimerad ROAS och skalbar annonsering',
-    href: '#case',
+    description: 'Global dominans inom Nicotine Pouches',
+    href: '#/case/nordic-fulfillment',
   },
   {
     image: '/images/case-nordic-bangers.jpg',
     title: 'Nordic Bangers',
     result: 'Helhetsstrategi',
-    description: 'B2B/B2C strategi för godistillverkare',
-    href: '#case',
+    description: 'Wholesale-succé för svenskt lösgodis',
+    href: '#/case/nordic-bangers',
   },
   {
     image: '/images/case-nordic-refreshment.jpg',
     title: 'Nordic Refreshment',
-    result: 'Marknadsledare',
-    description: 'Från idé till ledande varumärke',
-    href: '#case',
+    result: 'Delägare',
+    description: 'Från idé till marknadsledande sortiment',
+    href: '#/case/nordic-refreshment',
   },
   {
     image: '/images/case-riad-cosmetics.jpg',
     title: 'Riad Cosmetics',
     result: '12x ROAS',
-    description: 'Avancerad PMAX-optimering',
-    href: '#case',
+    description: 'Omnichannel-strategi för parfym',
+    href: '#/case/riad-cosmetics',
   },
 ];
 
@@ -137,13 +137,57 @@ const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<'services' | 'cases' | null>(null);
 
+  // Check if we're on a case study page
+  const isOnCasePage = () => {
+    const hash = window.location.hash;
+    return hash.startsWith('#/case/');
+  };
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Handle scroll after navigation (for when we navigate back from case page)
+  useEffect(() => {
+    const handleHashChange = () => {
+      // Check if there's a scroll target in sessionStorage
+      const scrollTarget = sessionStorage.getItem('scrollTarget');
+      if (scrollTarget && window.location.hash === '') {
+        sessionStorage.removeItem('scrollTarget');
+        // Small delay to allow page to render
+        setTimeout(() => {
+          const element = document.querySelector(scrollTarget);
+          if (element) element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   const scrollToSection = (href: string) => {
+    // Handle hash routes (case study pages)
+    if (href.startsWith('#/')) {
+      window.location.hash = href.slice(1);
+      setIsMobileMenuOpen(false);
+      setOpenAccordion(null);
+      return;
+    }
+    
+    // If on a case page and trying to go to a section on home page,
+    // store the target and navigate to home first
+    if (isOnCasePage() && href.startsWith('#')) {
+      sessionStorage.setItem('scrollTarget', href);
+      window.location.hash = ''; // Go to home page
+      setIsMobileMenuOpen(false);
+      setOpenAccordion(null);
+      return;
+    }
+    
+    // Handle section anchors (when already on home page)
     const element = document.querySelector(href);
     if (element) element.scrollIntoView({ behavior: 'smooth' });
     setIsMobileMenuOpen(false);
@@ -171,6 +215,7 @@ const Navigation = () => {
               className="flex items-center gap-2 transition-opacity hover:opacity-80"
               onClick={(e) => {
                 e.preventDefault();
+                window.location.hash = '';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
             >
@@ -185,6 +230,7 @@ const Navigation = () => {
             <div className="hidden md:flex items-center gap-8">
               <ServicesDropdown onNavigate={scrollToSection} />
               <CaseDropdown onNavigate={scrollToSection} />
+              
               <button
                 onClick={() => scrollToSection('#process')}
                 className="text-sm font-medium text-ascend-gray-600 dark:text-ascend-gray-400 hover:text-ascend-black dark:hover:text-white transition-colors relative group py-2"
@@ -356,12 +402,19 @@ const Navigation = () => {
 
             {/* ── Static nav links ───────────────── */}
             {[
-              { label: 'Hur vi jobbar', href: '#process' },
-              { label: 'Blogg', href: '#blogg' },
+             
+              { label: 'Hur vi jobbar', href: '#process', isHash: false },
+              { label: 'Blogg', href: '#blogg', isHash: false },
             ].map((link) => (
-              <button
+              <a
                 key={link.href}
-                onClick={() => scrollToSection(link.href)}
+                href={link.isHash ? link.href : undefined}
+                onClick={(e) => {
+                  if (link.isHash) {
+                    e.preventDefault();
+                  }
+                  scrollToSection(link.href);
+                }}
                 className="w-full flex items-center justify-between py-3 px-1 text-lg font-semibold text-ascend-gray-800 dark:text-ascend-gray-200 hover:text-ascend-black dark:hover:text-white transition-colors group"
               >
                 <div className="flex items-center gap-3">
@@ -372,7 +425,7 @@ const Navigation = () => {
                   size={14}
                   className="text-ascend-gray-300 dark:text-ascend-gray-600 group-hover:text-ascend-orange group-hover:translate-x-0.5 transition-all duration-200"
                 />
-              </button>
+              </a>
             ))}
 
             {/* ── Bottom bar: theme + CTA ─────────── */}
