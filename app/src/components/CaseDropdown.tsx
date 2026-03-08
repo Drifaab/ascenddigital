@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { TrendingUp, ArrowRight, ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface CaseItem {
   image: string;
@@ -9,15 +10,12 @@ interface CaseItem {
   href: string;
 }
 
-interface CaseDropdownProps {
-  onNavigate: (href: string) => void;
-}
-
-export function CaseDropdown({ onNavigate }: CaseDropdownProps) {
+export function CaseDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navigate = useNavigate();
 
   const cases: CaseItem[] = [
     {
@@ -25,28 +23,28 @@ export function CaseDropdown({ onNavigate }: CaseDropdownProps) {
       title: 'Nordic Fulfillment',
       result: '1000% ökning',
       description: 'Global dominans inom Nicotine Pouches',
-      href: '#/case/nordic-fulfillment',
+      href: '/case/nordic-fulfillment',
     },
     {
       image: '/images/case-nordic-bangers.jpg',
       title: 'Nordic Bangers',
       result: 'Helhetsstrategi',
       description: 'Wholesale-succé för svenskt lösgodis',
-      href: '#/case/nordic-bangers',
+      href: '/case/nordic-bangers',
     },
     {
       image: '/images/case-nordic-refreshment.jpg',
       title: 'Nordic Refreshment',
       result: 'Delägare',
       description: 'Från idé till marknadsledande sortiment',
-      href: '#/case/nordic-refreshment',
+      href: '/case/nordic-refreshment',
     },
     {
       image: '/images/case-riad-cosmetics.jpg',
       title: 'Riad Cosmetics',
       result: '12x ROAS',
       description: 'Omnichannel-strategi för parfym',
-      href: '#/case/riad-cosmetics',
+      href: '/case/riad-cosmetics',
     },
   ];
 
@@ -81,7 +79,18 @@ export function CaseDropdown({ onNavigate }: CaseDropdownProps) {
 
   const handleClick = (href: string) => {
     setIsOpen(false);
-    onNavigate(href);
+    if (href.startsWith('#')) {
+      // Anchor link - navigate to home and scroll
+      navigate('/' + href);
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      navigate(href);
+    }
   };
 
   return (

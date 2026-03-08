@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Clock, FileCheck, ArrowRight, ChevronDown, ChevronUp, RefreshCw, Network, FileText } from 'lucide-react';
 
 interface ProcessStepProps {
@@ -70,7 +71,9 @@ interface PillarCardProps {
   link: string;
 }
 
-const PillarCard = ({ icon, title, description }: PillarCardProps) => {
+const PillarCard = ({ icon, title, description, link }: PillarCardProps) => {
+  const navigate = useNavigate();
+  
   return (
     <div className="group p-6 bg-white dark:bg-ascend-gray-800 rounded-xl border border-ascend-gray-100 dark:border-ascend-gray-700 transition-all duration-300 hover:shadow-soft hover:-translate-y-1">
       <div className="w-12 h-12 bg-ascend-orange/10 rounded-xl flex items-center justify-center mb-4">
@@ -82,7 +85,10 @@ const PillarCard = ({ icon, title, description }: PillarCardProps) => {
       <p className="text-sm text-ascend-gray-600 dark:text-ascend-gray-400 leading-relaxed mb-4">
         {description}
       </p>
-      <button className="inline-flex items-center gap-1 text-sm font-medium text-ascend-orange group/btn">
+      <button 
+        onClick={() => navigate(link)}
+        className="inline-flex items-center gap-1 text-sm font-medium text-ascend-orange group/btn"
+      >
         Läs mer
         <ArrowRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
       </button>

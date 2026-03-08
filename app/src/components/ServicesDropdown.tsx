@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Search, Share2, Code2, RefreshCw, ArrowRight, ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface ServiceItem {
   icon: React.ReactNode;
@@ -9,43 +10,40 @@ interface ServiceItem {
   color: string;
 }
 
-interface ServicesDropdownProps {
-  onNavigate: (href: string) => void;
-}
-
-export function ServicesDropdown({ onNavigate }: ServicesDropdownProps) {
+export function ServicesDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navigate = useNavigate();
 
   const services: ServiceItem[] = [
     {
       icon: <Search size={20} />,
       title: 'SEM / SEO / GEO',
       description: 'Datadriven sökstrategi för maximal konvertering',
-      href: '#tjanster',
+      href: '/tjanster/sem-seo-geo',
       color: 'from-ascend-orange/20 to-ascend-orange/5',
     },
     {
       icon: <Share2 size={20} />,
       title: 'Paid Social',
       description: 'Kreativ testmetodik i sociala kanaler',
-      href: '#tjanster',
+      href: '/tjanster/paid-social',
       color: 'from-ascend-maize/30 to-ascend-maize/10',
     },
     {
       icon: <Code2 size={20} />,
       title: 'Full-stack Development',
       description: 'Skalbara webblösningar för prestanda',
-      href: '#tjanster',
+      href: '/tjanster/fullstack-development',
       color: 'from-ascend-gray-300/50 to-ascend-gray-200/20',
     },
     {
       icon: <RefreshCw size={20} />,
       title: 'Agile Business Development',
       description: 'Iterativt arbetssätt med fokus',
-      href: '#tjanster',
+      href: '/tjanster/agile-business-development',
       color: 'from-ascend-orange/15 to-ascend-orange/5',
     },
   ];
@@ -79,10 +77,21 @@ export function ServicesDropdown({ onNavigate }: ServicesDropdownProps) {
     }, 150);
   };
 
-  const handleClick = (href: string) => {
+  const handleClick = useCallback((href: string) => {
     setIsOpen(false);
-    onNavigate(href);
-  };
+    if (href.startsWith('#')) {
+      // Anchor link - navigate to home and scroll
+      navigate('/' + href);
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      navigate(href);
+    }
+  }, [navigate]);
 
   return (
     <div

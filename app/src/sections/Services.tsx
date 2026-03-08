@@ -7,9 +7,10 @@ interface ServiceCardProps {
   description: string;
   features: string[];
   color: 'orange' | 'maize' | 'gray';
+  href: string;
 }
 
-const ServiceCard = ({ icon, title, subtitle, description, features, color }: ServiceCardProps) => {
+const ServiceCard = ({ icon, title, subtitle, description, features, color, href }: ServiceCardProps) => {
   const colorClasses = {
     orange: 'bg-ascend-orange/5 dark:bg-ascend-orange/10 border-ascend-orange/10 dark:border-ascend-orange/20 hover:border-ascend-orange/30 dark:hover:border-ascend-orange/40',
     maize: 'bg-ascend-maize/10 dark:bg-ascend-maize/5 border-ascend-maize/20 dark:border-ascend-maize/10 hover:border-ascend-maize/40 dark:hover:border-ascend-maize/30',
@@ -23,7 +24,10 @@ const ServiceCard = ({ icon, title, subtitle, description, features, color }: Se
   };
 
   return (
-    <div className={`group relative p-6 md:p-8 rounded-2xl border ${colorClasses[color]} transition-all duration-300 hover:shadow-card hover:-translate-y-1 dark:hover:shadow-card/20`}>
+    <a
+      href={href}
+      className={`group relative p-6 md:p-8 rounded-2xl border ${colorClasses[color]} transition-all duration-300 hover:shadow-card hover:-translate-y-1 dark:hover:shadow-card/20 block cursor-pointer`}
+    >
       {/* Icon */}
       <div className={`w-14 h-14 rounded-xl ${iconColors[color]} flex items-center justify-center mb-6`}>
         {icon}
@@ -59,7 +63,7 @@ const ServiceCard = ({ icon, title, subtitle, description, features, color }: Se
       <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
         <ArrowUpRight size={20} className="text-ascend-orange" />
       </div>
-    </div>
+    </a>
   );
 };
 
@@ -77,6 +81,7 @@ const Services = () => {
         'Datakvalitet & spårning (GA4)',
       ],
       color: 'orange' as const,
+      href: '/tjanster/sem-seo-geo',
     },
     {
       icon: <Share2 size={28} />,
@@ -90,6 +95,7 @@ const Services = () => {
         'Funnel-strategi & retargeting',
       ],
       color: 'maize' as const,
+      href: '/tjanster/paid-social',
     },
     {
       icon: <Code2 size={28} />,
@@ -103,6 +109,7 @@ const Services = () => {
         'Teknisk integration & spårning',
       ],
       color: 'gray' as const,
+      href: '/tjanster/fullstack-development',
     },
     {
       icon: <RefreshCw size={28} />,
@@ -116,6 +123,7 @@ const Services = () => {
         'KPI-driven processoptimering',
       ],
       color: 'orange' as const,
+      href: '/tjanster/agile-business-development',
     },
   ];
 

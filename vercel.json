@@ -2,5 +2,18 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/tjanster/sem-seo-geo", "destination": "/index.html" },
+    { "source": "/tjanster/paid-social", "destination": "/index.html" },
+    { "source": "/tjanster/fullstack-development", "destination": "/index.html" },
+    { "source": "/tjanster/agile-business-development", "destination": "/index.html" },
+    { "source": "/case/nordic-fulfillment", "destination": "/index.html" },
+    { "source": "/case/nordic-bangers", "destination": "/index.html" },
+    { "source": "/case/nordic-refreshment", "destination": "/index.html" },
+    { "source": "/case/riad-cosmetics", "destination": "/index.html" },
+    { "source": "/tjanster", "destination": "/index.html" },
+    { "source": "/case", "destination": "/index.html" },
+    { "source": "/((?!api|images|assets|.*\\.[^/]+$).*)", "destination": "/index.html" }
+  ]
 }

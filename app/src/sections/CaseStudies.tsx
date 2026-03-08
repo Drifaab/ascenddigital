@@ -1,4 +1,5 @@
 import { ArrowUpRight, TrendingUp, BarChart3, Rocket, Target } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface CaseCardProps {
   image: string;
@@ -9,13 +10,14 @@ interface CaseCardProps {
   stats: { label: string; value: string }[];
   tags: string[];
   href: string;
-  onNavigate: (href: string) => void;
 }
 
-const CaseCard = ({ image, title, category, result, description, stats, tags, href, onNavigate }: CaseCardProps) => {
+const CaseCard = ({ image, title, category, result, description, stats, tags, href }: CaseCardProps) => {
+  const navigate = useNavigate();
+  
   return (
     <div 
-      onClick={() => onNavigate(href)}
+      onClick={() => navigate(href)}
       className="group relative bg-white dark:bg-ascend-gray-800 rounded-2xl overflow-hidden border border-ascend-gray-100 dark:border-ascend-gray-700 transition-all duration-300 hover:shadow-card hover:-translate-y-1 dark:hover:shadow-card/20 cursor-pointer"
     >
       {/* Image */}
@@ -91,11 +93,13 @@ interface CaseStudiesProps {
 }
 
 const CaseStudies = ({ onNavigate }: CaseStudiesProps) => {
+  const navigate = useNavigate();
+  
   const handleNavigate = (href: string) => {
     if (onNavigate) {
       onNavigate(href);
     } else {
-      window.location.hash = href.slice(1); // Remove the leading #
+      navigate(href);
     }
   };
 
@@ -112,7 +116,7 @@ const CaseStudies = ({ onNavigate }: CaseStudiesProps) => {
         { label: 'ROAS', value: '8.5x' },
       ],
       tags: ['Google Ads', 'PMAX', 'Merchant Center', 'ROAS-optimering'],
-      href: '#/case/nordic-fulfillment',
+      href: '/case/nordic-fulfillment',
     },
     {
       image: '/images/case-nordic-bangers.jpg',
@@ -126,7 +130,7 @@ const CaseStudies = ({ onNavigate }: CaseStudiesProps) => {
         { label: 'Konvertering', value: '+28%' },
       ],
       tags: ['Google Ads', 'SEO', 'Sociala medier', 'AI-content'],
-      href: '#/case/nordic-bangers',
+      href: '/case/nordic-bangers',
     },
     {
       image: '/images/case-nordic-refreshment.jpg',
@@ -140,7 +144,7 @@ const CaseStudies = ({ onNavigate }: CaseStudiesProps) => {
         { label: 'Ranking', value: '#1' },
       ],
       tags: ['Full-stack', 'SEO', 'PMAX', 'Social Media'],
-      href: '#/case/nordic-refreshment',
+      href: '/case/nordic-refreshment',
     },
     {
       image: '/images/case-riad-cosmetics.jpg',
@@ -154,7 +158,7 @@ const CaseStudies = ({ onNavigate }: CaseStudiesProps) => {
         { label: 'Lokalt', value: '50+' },
       ],
       tags: ['PMAX', 'Local Campaigns', 'Google Maps', 'Premium'],
-      href: '#/case/riad-cosmetics',
+      href: '/case/riad-cosmetics',
     },
   ];
 
@@ -202,7 +206,7 @@ const CaseStudies = ({ onNavigate }: CaseStudiesProps) => {
           {/* Cases Grid */}
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
             {cases.map((caseItem, index) => (
-              <CaseCard key={index} {...caseItem} onNavigate={handleNavigate} />
+              <CaseCard key={index} {...caseItem} />
             ))}
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Menu, X, Search, Share2, Code2, RefreshCw, TrendingUp, ArrowRight, ChevronDown } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ServicesDropdown } from '@/components/ServicesDropdown';
 import { CaseDropdown } from '@/components/CaseDropdown';
@@ -11,28 +12,28 @@ const services = [
     icon: <Search size={18} />,
     title: 'SEM / SEO / GEO',
     description: 'Datadriven sökstrategi för maximal konvertering',
-    href: '#tjanster',
+    href: '/tjanster/sem-seo-geo',
     accent: 'from-orange-500/20 to-orange-400/5',
   },
   {
     icon: <Share2 size={18} />,
     title: 'Paid Social',
     description: 'Kreativ testmetodik i sociala kanaler',
-    href: '#tjanster',
+    href: '/tjanster/paid-social',
     accent: 'from-yellow-400/30 to-yellow-300/10',
   },
   {
     icon: <Code2 size={18} />,
     title: 'Full-stack Development',
     description: 'Skalbara webblösningar för prestanda',
-    href: '#tjanster',
+    href: '/tjanster/fullstack-development',
     accent: 'from-gray-300/40 to-gray-200/10',
   },
   {
     icon: <RefreshCw size={18} />,
     title: 'Agile Business Development',
     description: 'Iterativt arbetssätt med fokus',
-    href: '#tjanster',
+    href: '/tjanster/agile-business-development',
     accent: 'from-orange-400/15 to-orange-300/5',
   },
 ];
@@ -43,28 +44,28 @@ const cases = [
     title: 'Nordic Fulfillment',
     result: '1000% ökning',
     description: 'Global dominans inom Nicotine Pouches',
-    href: '#/case/nordic-fulfillment',
+    href: '/case/nordic-fulfillment',
   },
   {
     image: '/images/case-nordic-bangers.jpg',
     title: 'Nordic Bangers',
     result: 'Helhetsstrategi',
     description: 'Wholesale-succé för svenskt lösgodis',
-    href: '#/case/nordic-bangers',
+    href: '/case/nordic-bangers',
   },
   {
     image: '/images/case-nordic-refreshment.jpg',
     title: 'Nordic Refreshment',
     result: 'Delägare',
     description: 'Från idé till marknadsledande sortiment',
-    href: '#/case/nordic-refreshment',
+    href: '/case/nordic-refreshment',
   },
   {
     image: '/images/case-riad-cosmetics.jpg',
     title: 'Riad Cosmetics',
     result: '12x ROAS',
     description: 'Omnichannel-strategi för parfym',
-    href: '#/case/riad-cosmetics',
+    href: '/case/riad-cosmetics',
   },
 ];
 
@@ -136,12 +137,8 @@ const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<'services' | 'cases' | null>(null);
-
-  // Check if we're on a case study page
-  const isOnCasePage = () => {
-    const hash = window.location.hash;
-    return hash.startsWith('#/case/');
-  };
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -149,49 +146,28 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handle scroll after navigation (for when we navigate back from case page)
-  useEffect(() => {
-    const handleHashChange = () => {
-      // Check if there's a scroll target in sessionStorage
-      const scrollTarget = sessionStorage.getItem('scrollTarget');
-      if (scrollTarget && window.location.hash === '') {
-        sessionStorage.removeItem('scrollTarget');
-        // Small delay to allow page to render
-        setTimeout(() => {
-          const element = document.querySelector(scrollTarget);
-          if (element) element.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      }
-    };
-
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
-
   const scrollToSection = (href: string) => {
-    // Handle hash routes (case study pages)
-    if (href.startsWith('#/')) {
-      window.location.hash = href.slice(1);
-      setIsMobileMenuOpen(false);
-      setOpenAccordion(null);
-      return;
+    if (href.startsWith('#')) {
+      // Anchor link
+      if (location.pathname !== '/') {
+        // Navigate to home page with hash
+        navigate('/' + href);
+      } else {
+        // On home page, update URL hash and scroll
+        navigate(href, { replace: true });
+        const element = document.querySelector(href);
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate(href);
     }
-    
-    // If on a case page and trying to go to a section on home page,
-    // store the target and navigate to home first
-    if (isOnCasePage() && href.startsWith('#')) {
-      sessionStorage.setItem('scrollTarget', href);
-      window.location.hash = ''; // Go to home page
-      setIsMobileMenuOpen(false);
-      setOpenAccordion(null);
-      return;
-    }
-    
-    // Handle section anchors (when already on home page)
-    const element = document.querySelector(href);
-    if (element) element.scrollIntoView({ behavior: 'smooth' });
     setIsMobileMenuOpen(false);
     setOpenAccordion(null);
+  };
+
+  const handleLogoClick = () => {
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const toggleAccordion = (key: 'services' | 'cases') =>
@@ -210,26 +186,21 @@ const Navigation = () => {
         <div className="container-wide">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
-            <a
-              href="#"
+            <button
+              onClick={handleLogoClick}
               className="flex items-center gap-2 transition-opacity hover:opacity-80"
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.hash = '';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
             >
               <img
                 src="/images/Ascend Digital logo - full - jet black PNG_Rityta 1 (1).png"
                 alt="Ascend Digital"
                 className="h-8 md:h-10 w-auto dark:invert"
               />
-            </a>
+            </button>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              <ServicesDropdown onNavigate={scrollToSection} />
-              <CaseDropdown onNavigate={scrollToSection} />
+              <ServicesDropdown />
+              <CaseDropdown />
               
               <button
                 onClick={() => scrollToSection('#process')}
@@ -238,13 +209,7 @@ const Navigation = () => {
                 Hur vi jobbar
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-ascend-orange transition-all duration-300 group-hover:w-full" />
               </button>
-              <button
-                onClick={() => scrollToSection('#blogg')}
-                className="text-sm font-medium text-ascend-gray-600 dark:text-ascend-gray-400 hover:text-ascend-black dark:hover:text-white transition-colors relative group py-2"
-              >
-                Blogg
-                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-ascend-orange transition-all duration-300 group-hover:w-full" />
-              </button>
+
             </div>
 
             {/* CTA + Theme toggle (desktop) */}
@@ -402,20 +367,12 @@ const Navigation = () => {
 
             {/* ── Static nav links ───────────────── */}
             {[
-             
-              { label: 'Hur vi jobbar', href: '#process', isHash: false },
-              { label: 'Blogg', href: '#blogg', isHash: false },
+              { label: 'Hur vi jobbar', href: '#process' },
             ].map((link) => (
-              <a
+              <button
                 key={link.href}
-                href={link.isHash ? link.href : undefined}
-                onClick={(e) => {
-                  if (link.isHash) {
-                    e.preventDefault();
-                  }
-                  scrollToSection(link.href);
-                }}
-                className="w-full flex items-center justify-between py-3 px-1 text-lg font-semibold text-ascend-gray-800 dark:text-ascend-gray-200 hover:text-ascend-black dark:hover:text-white transition-colors group"
+                onClick={() => scrollToSection(link.href)}
+                className="w-full flex items-center justify-between py-3 px-1 text-lg font-semibold text-ascend-gray-800 dark:text-ascend-gray-200 hover:text-ascend-black dark:hover:text-white transition-colors group text-left"
               >
                 <div className="flex items-center gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-ascend-gray-300 dark:bg-ascend-gray-600 group-hover:bg-ascend-orange transition-colors duration-200" />
@@ -425,7 +382,7 @@ const Navigation = () => {
                   size={14}
                   className="text-ascend-gray-300 dark:text-ascend-gray-600 group-hover:text-ascend-orange group-hover:translate-x-0.5 transition-all duration-200"
                 />
-              </a>
+              </button>
             ))}
 
             {/* ── Bottom bar: theme + CTA ─────────── */}

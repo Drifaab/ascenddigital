@@ -1,11 +1,9 @@
 import { ArrowLeft, TrendingUp, Target, Globe, Mail, Search, BarChart3 } from 'lucide-react';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
+import { useNavigate } from 'react-router-dom';
 
-interface CaseNordicFulfillmentProps {
-  onNavigate: (href: string) => void;
-}
-
-const CaseNordicFulfillment = ({ onNavigate }: CaseNordicFulfillmentProps) => {
+const CaseNordicFulfillment = () => {
+  const navigate = useNavigate();
   const stats = [
     { value: '1,7', suffix: 'M', prefix: '', label: 'Månadsomsättning SEK', subtext: 'Per 30 dagar' },
     { value: '40', suffix: 'K', prefix: '', label: 'Initial omsättning/mån', subtext: 'Vid start' },
@@ -21,7 +19,7 @@ const CaseNordicFulfillment = ({ onNavigate }: CaseNordicFulfillmentProps) => {
           <div className="absolute inset-0" style={{ backgroundImage: `radial-gradient(circle at 1px 1px, #1A1A1A 1px, transparent 0)`, backgroundSize: '32px 32px' }} />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <button onClick={() => onNavigate('#case')} className="inline-flex items-center gap-2 text-sm text-ascend-gray-600 dark:text-ascend-gray-400 hover:text-ascend-orange transition-colors mb-8">
+          <button onClick={() => navigate('/case')} className="inline-flex items-center gap-2 text-sm text-ascend-gray-600 dark:text-ascend-gray-400 hover:text-ascend-orange transition-colors mb-8">
             <ArrowLeft className="w-4 h-4" />
             Tillbaka till case
           </button>
@@ -213,8 +211,8 @@ const CaseNordicFulfillment = ({ onNavigate }: CaseNordicFulfillmentProps) => {
             Låt oss diskutera hur vi kan hjälpa ditt företag att växa genom datadriven marknadsföring och strategisk digital utveckling.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onClick={() => onNavigate('#contact')} className="btn-primary">Kontakta oss</button>
-            <button onClick={() => onNavigate('#case')} className="btn-secondary">Se fler case</button>
+            <button onClick={() => navigate('/contact')} className="btn-primary">Kontakta oss</button>
+            <button onClick={() => navigate('/case')} className="btn-secondary">Se fler case</button>
           </div>
         </div>
       </section>

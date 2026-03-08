@@ -1,20 +1,22 @@
 import { Mail, Phone, MapPin, Linkedin, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
 
   const footerLinks = {
     tjanster: [
-      { label: 'SEM / SEO / GEO', href: '#' },
-      { label: 'Paid Social', href: '#' },
-      { label: 'Full-stack Development', href: '#' },
-      { label: 'Agile Business Development', href: '#' },
+      { label: 'SEM / SEO / GEO', href: '/tjanster/sem-seo-geo' },
+      { label: 'Paid Social', href: '/tjanster/paid-social' },
+      { label: 'Full-stack Development', href: '/tjanster/fullstack-development' },
+      { label: 'Agile Business Development', href: '/tjanster/agile-business-development' },
     ],
     case: [
-      { label: 'Nordic Fulfillment', href: '#' },
-      { label: 'Nordic Bangers', href: '#' },
-      { label: 'Nordic Refreshment', href: '#' },
-      { label: 'Riad Cosmetics', href: '#' },
+      { label: 'Nordic Fulfillment', href: '/case/nordic-fulfillment' },
+      { label: 'Nordic Bangers', href: '/case/nordic-bangers' },
+      { label: 'Nordic Refreshment', href: '/case/nordic-refreshment' },
+      { label: 'Riad Cosmetics', href: '/case/riad-cosmetics' },
     ],
     omOss: [
       { label: 'Hur vi jobbar', href: '#process' },
@@ -24,12 +26,14 @@ const Footer = () => {
     ],
   };
 
-  const scrollToSection = (href: string) => {
+  const handleNavigate = (href: string) => {
     if (href.startsWith('#')) {
       const element = document.querySelector(href);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
+    } else {
+      navigate(href);
     }
   };
 
@@ -117,8 +121,8 @@ const Footer = () => {
                 {footerLinks.tjanster.map((link, index) => (
                   <li key={index}>
                     <button
-                      onClick={() => scrollToSection(link.href)}
-                      className="text-sm text-white/60 hover:text-ascend-orange transition-colors"
+                      onClick={() => handleNavigate(link.href)}
+                      className="text-sm text-white/60 hover:text-ascend-orange transition-colors text-left"
                     >
                       {link.label}
                     </button>
@@ -135,8 +139,8 @@ const Footer = () => {
                 {footerLinks.case.map((link, index) => (
                   <li key={index}>
                     <button
-                      onClick={() => scrollToSection(link.href)}
-                      className="text-sm text-white/60 hover:text-ascend-orange transition-colors"
+                      onClick={() => handleNavigate(link.href)}
+                      className="text-sm text-white/60 hover:text-ascend-orange transition-colors text-left"
                     >
                       {link.label}
                     </button>
@@ -153,8 +157,8 @@ const Footer = () => {
                 {footerLinks.omOss.map((link, index) => (
                   <li key={index}>
                     <button
-                      onClick={() => scrollToSection(link.href)}
-                      className="text-sm text-white/60 hover:text-ascend-orange transition-colors"
+                      onClick={() => handleNavigate(link.href)}
+                      className="text-sm text-white/60 hover:text-ascend-orange transition-colors text-left"
                     >
                       {link.label}
                     </button>

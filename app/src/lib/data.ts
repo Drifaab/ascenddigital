@@ -8,7 +8,7 @@ export const navItems = [
   { href: '#tjanster', label: 'Tjänster' },
   { href: '#case', label: 'Case' },
   { href: '#process', label: 'Hur vi jobbar' },
-  { href: '#blogg', label: 'Blogg' },
+
   { href: '#contact', label: 'Kontakt' },
 ];
 
