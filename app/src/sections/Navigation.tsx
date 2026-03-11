@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Menu, X, Search, Share2, Code2, RefreshCw, TrendingUp, ArrowRight, ChevronDown } from 'lucide-react';
+import { Menu, X, Search, Share2, Code2, RefreshCw, TrendingUp, ArrowRight, ChevronDown, Network, FileText } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ServicesDropdown } from '@/components/ServicesDropdown';
 import { CaseDropdown } from '@/components/CaseDropdown';
+import { ProcessDropdown } from '@/components/ProcessDropdown';
 
 /* ─── shared data (mirrors desktop dropdowns) ─────────────────────────── */
 
@@ -136,7 +137,7 @@ function MobileAccordion({ label, badge, isOpen, onToggle, children }: MobileAcc
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openAccordion, setOpenAccordion] = useState<'services' | 'cases' | null>(null);
+  const [openAccordion, setOpenAccordion] = useState<'services' | 'cases' | 'process' | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -152,6 +153,7 @@ const Navigation = () => {
       if (location.pathname !== '/') {
         // Navigate to home page with hash
         navigate('/' + href);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         // On home page, update URL hash and scroll
         navigate(href, { replace: true });
@@ -159,7 +161,9 @@ const Navigation = () => {
         if (element) element.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
+      // Navigate to new page and scroll to top
       navigate(href);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     setIsMobileMenuOpen(false);
     setOpenAccordion(null);
@@ -170,7 +174,7 @@ const Navigation = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const toggleAccordion = (key: 'services' | 'cases') =>
+  const toggleAccordion = (key: 'services' | 'cases' | 'process') =>
     setOpenAccordion((prev) => (prev === key ? null : key));
 
   return (
@@ -201,12 +205,13 @@ const Navigation = () => {
             <div className="hidden md:flex items-center gap-8">
               <ServicesDropdown />
               <CaseDropdown />
+              <ProcessDropdown />
               
               <button
-                onClick={() => scrollToSection('#process')}
+                onClick={() => scrollToSection('/kontakt')}
                 className="text-sm font-medium text-ascend-gray-600 dark:text-ascend-gray-400 hover:text-ascend-black dark:hover:text-white transition-colors relative group py-2"
               >
-                Hur vi jobbar
+                Kontakt
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-ascend-orange transition-all duration-300 group-hover:w-full" />
               </button>
 
@@ -215,8 +220,8 @@ const Navigation = () => {
             {/* CTA + Theme toggle (desktop) */}
             <div className="hidden md:flex items-center gap-4">
               <ThemeToggle />
-              <button onClick={() => scrollToSection('#contact')} className="btn-primary">
-                Kontakt
+              <button onClick={() => scrollToSection('/kontakt')} className="btn-primary">
+                Boka möte
               </button>
             </div>
 
@@ -365,9 +370,68 @@ const Navigation = () => {
             {/* Divider */}
             <div className="h-px bg-ascend-gray-100 dark:bg-ascend-gray-700/60 mx-1 my-0.5" />
 
+            {/* ── HUR VI JOBBAR accordion ─────────── */}
+            <MobileAccordion
+              label="Hur vi jobbar"
+              badge="3 områden"
+              isOpen={openAccordion === 'process'}
+              onToggle={() => toggleAccordion('process')}
+            >
+              <div className="flex flex-col gap-1.5 mt-1">
+                {[
+                  {
+                    icon: <RefreshCw size={18} />,
+                    title: 'Agilt Mindset',
+                    description: 'Iterativt och datadrivet arbetssätt',
+                    href: '/agilt-mindset',
+                    accent: 'from-orange-500/20 to-orange-400/5',
+                  },
+                  {
+                    icon: <Network size={18} />,
+                    title: 'Partnerskap',
+                    description: 'Samarbetsformer och specialistnätverk',
+                    href: '/partnerskap-och-natverk',
+                    accent: 'from-yellow-400/30 to-yellow-300/10',
+                  },
+                  {
+                    icon: <FileText size={18} />,
+                    title: 'Avtalsformer',
+                    description: 'Flexibla modeller byggda för skalning',
+                    href: '/avtalsformer',
+                    accent: 'from-gray-300/40 to-gray-200/10',
+                  },
+                ].map((p, i) => (
+                  <button
+                    key={i}
+                    onClick={() => scrollToSection(p.href)}
+                    className={`group w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-gradient-to-r ${p.accent} hover:brightness-105 active:scale-[0.98] transition-all duration-200 text-left`}
+                  >
+                    <span className="flex-shrink-0 w-9 h-9 rounded-lg bg-white/70 dark:bg-white/10 flex items-center justify-center text-ascend-orange shadow-sm">
+                      {p.icon}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-ascend-black dark:text-white leading-tight">
+                        {p.title}
+                      </p>
+                      <p className="text-xs text-ascend-gray-500 dark:text-ascend-gray-400 mt-0.5 truncate">
+                        {p.description}
+                      </p>
+                    </div>
+                    <ArrowRight
+                      size={13}
+                      className="flex-shrink-0 text-ascend-orange opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200"
+                    />
+                  </button>
+                ))}
+              </div>
+            </MobileAccordion>
+
+            {/* Divider */}
+            <div className="h-px bg-ascend-gray-100 dark:bg-ascend-gray-700/60 mx-1 my-0.5" />
+
             {/* ── Static nav links ───────────────── */}
             {[
-              { label: 'Hur vi jobbar', href: '#process' },
+              { label: 'Kontakt', href: '/kontakt' },
             ].map((link) => (
               <button
                 key={link.href}
@@ -392,10 +456,10 @@ const Navigation = () => {
                 <span className="text-xs text-ascend-gray-500 dark:text-ascend-gray-400">Tema</span>
               </div>
               <button
-                onClick={() => scrollToSection('#contact')}
+                onClick={() => scrollToSection('/kontakt')}
                 className="btn-primary flex-1"
               >
-                Kontakt
+                Boka möte
               </button>
             </div>
           </div>

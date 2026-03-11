@@ -1,50 +1,43 @@
 import { useState, useRef, useEffect } from 'react';
-import { TrendingUp, ArrowRight, ChevronDown } from 'lucide-react';
+import { RefreshCw, Network, FileText, ArrowRight, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-interface CaseItem {
-  image: string;
+interface ProcessItem {
+  icon: React.ReactNode;
   title: string;
-  result: string;
   description: string;
   href: string;
+  color: string;
 }
 
-export function CaseDropdown() {
+export function ProcessDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navigate = useNavigate();
 
-  const cases: CaseItem[] = [
+  const processes: ProcessItem[] = [
     {
-      image: '/images/case-nordic-fulfillment.jpg',
-      title: 'Nordic Fulfillment',
-      result: '1000% ökning',
-      description: 'Global dominans inom Nicotine Pouches',
-      href: '/case/nordic-fulfillment',
+      icon: <RefreshCw size={20} />,
+      title: 'Agilt Mindset',
+      description: 'Iterativt och datadrivet arbetssätt',
+      href: '/agilt-mindset',
+      color: 'from-ascend-orange/20 to-ascend-orange/5',
     },
     {
-      image: '/images/case-nordic-bangers.jpg',
-      title: 'Nordic Bangers',
-      result: 'Helhetsstrategi',
-      description: 'Wholesale-succé för svenskt lösgodis',
-      href: '/case/nordic-bangers',
+      icon: <Network size={20} />,
+      title: 'Partnerskap',
+      description: 'Samarbetsformer och specialistnätverk',
+      href: '/partnerskap-och-natverk',
+      color: 'from-ascend-maize/30 to-ascend-maize/10',
     },
     {
-      image: '/images/case-nordic-refreshment.jpg',
-      title: 'Nordic Refreshment',
-      result: 'Delägare',
-      description: 'Från idé till marknadsledande sortiment',
-      href: '/case/nordic-refreshment',
-    },
-    {
-      image: '/images/case-riad-cosmetics.jpg',
-      title: 'Riad Cosmetics',
-      result: '12x ROAS',
-      description: 'Omnichannel-strategi för parfym',
-      href: '/case/riad-cosmetics',
+      icon: <FileText size={20} />,
+      title: 'Avtalsformer',
+      description: 'Flexibla modeller byggda för skalning',
+      href: '/avtalsformer',
+      color: 'from-ascend-gray-300/50 to-ascend-gray-200/20',
     },
   ];
 
@@ -80,7 +73,6 @@ export function CaseDropdown() {
   const handleClick = (href: string) => {
     setIsOpen(false);
     if (href.startsWith('#')) {
-      // Anchor link - navigate to home and scroll
       navigate('/' + href);
       setTimeout(() => {
         const element = document.querySelector(href);
@@ -105,9 +97,9 @@ export function CaseDropdown() {
       {/* Trigger Button */}
       <button
         className="flex items-center gap-1 text-sm font-medium text-ascend-gray-600 dark:text-ascend-gray-400 hover:text-ascend-black dark:hover:text-white transition-colors relative group py-2"
-        onClick={() => handleClick('#case')}
+        onClick={() => handleClick('#process')}
       >
-        Case
+        Hur vi jobbar
         <ChevronDown
           size={16}
           className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
@@ -123,69 +115,56 @@ export function CaseDropdown() {
             : 'opacity-0 -translate-y-3 pointer-events-none'
         }`}
       >
-        <div className="relative bg-white dark:bg-ascend-gray-800 rounded-2xl shadow-card dark:shadow-card/30 border border-ascend-gray-100 dark:border-ascend-gray-700 overflow-hidden min-w-[400px]">
+        <div className="relative bg-white dark:bg-ascend-gray-800 rounded-2xl shadow-card dark:shadow-card/30 border border-ascend-gray-100 dark:border-ascend-gray-700 overflow-hidden min-w-[340px]">
           {/* Animated Background Gradient */}
           <div className="absolute inset-0 opacity-30 dark:opacity-20">
-            <div className="absolute -top-20 -left-20 w-40 h-40 bg-ascend-orange/20 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-ascend-maize/20 rounded-full blur-3xl animate-pulse animation-delay-500" />
+            <div className="absolute -top-20 -right-20 w-40 h-40 bg-ascend-orange/20 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-ascend-maize/20 rounded-full blur-3xl animate-pulse animation-delay-500" />
           </div>
 
           {/* Header */}
           <div className="relative px-6 py-4 border-b border-ascend-gray-100 dark:border-ascend-gray-700">
             <p className="text-xs font-medium text-ascend-orange uppercase tracking-wider">
-              Case Studies
+              Hur vi jobbar
             </p>
             <p className="text-sm text-ascend-gray-500 dark:text-ascend-gray-400 mt-1">
-              Resultat som talar för sig själva
+              Vårt arbetssätt och våra samarbetsformer
             </p>
           </div>
 
-          {/* Case Items */}
+          {/* Process Items */}
           <div className="relative p-3">
-            {cases.map((caseItem, index) => (
+            {processes.map((process, index) => (
               <button
                 key={index}
-                onClick={() => handleClick(caseItem.href)}
+                onClick={() => handleClick(process.href)}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all duration-300 group ${
+                className={`w-full flex items-start gap-4 p-4 rounded-xl transition-all duration-300 group ${
                   hoveredIndex === index
-                    ? 'bg-ascend-gray-50 dark:bg-ascend-gray-700/50'
+                    ? 'bg-gradient-to-r ' + process.color
                     : 'hover:bg-ascend-gray-50 dark:hover:bg-ascend-gray-700/50'
                 }`}
               >
-                {/* Image */}
-                <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden relative">
-                  <img
-                    src={caseItem.image}
-                    alt={caseItem.title}
-                    className={`w-full h-full object-cover transition-all duration-500 ${
-                      hoveredIndex === index ? 'scale-110' : 'scale-100'
-                    }`}
-                  />
-                  <div className={`absolute inset-0 bg-ascend-orange/20 transition-opacity duration-300 ${
-                    hoveredIndex === index ? 'opacity-100' : 'opacity-0'
-                  }`} />
+                {/* Icon Container */}
+                <div
+                  className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                    hoveredIndex === index
+                      ? 'bg-ascend-orange text-white scale-110'
+                      : 'bg-ascend-gray-100 dark:bg-ascend-gray-700 text-ascend-gray-600 dark:text-ascend-gray-400 group-hover:text-ascend-orange'
+                  }`}
+                >
+                  {process.icon}
                 </div>
 
                 {/* Content */}
                 <div className="flex-1 text-left">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className="font-semibold text-ascend-black dark:text-white group-hover:text-ascend-orange transition-colors">
-                      {caseItem.title}
-                    </h4>
-                  </div>
-                  <p className="text-sm text-ascend-gray-500 dark:text-ascend-gray-400">
-                    {caseItem.description}
+                  <h4 className="font-semibold text-ascend-black dark:text-white group-hover:text-ascend-orange transition-colors">
+                    {process.title}
+                  </h4>
+                  <p className="text-sm text-ascend-gray-500 dark:text-ascend-gray-400 mt-0.5">
+                    {process.description}
                   </p>
-                </div>
-
-                {/* Result Badge */}
-                <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-ascend-orange/10 rounded-full">
-                  <TrendingUp size={12} className="text-ascend-orange" />
-                  <span className="text-xs font-semibold text-ascend-orange">
-                    {caseItem.result}
-                  </span>
                 </div>
 
                 {/* Arrow */}
@@ -205,10 +184,10 @@ export function CaseDropdown() {
           {/* Footer CTA */}
           <div className="relative px-6 py-4 bg-ascend-gray-50 dark:bg-ascend-gray-700/50 border-t border-ascend-gray-100 dark:border-ascend-gray-700">
             <button
-              onClick={() => handleClick('#case')}
+              onClick={() => handleClick('#process')}
               className="w-full flex items-center justify-center gap-2 text-sm font-medium text-ascend-orange hover:text-ascend-orange/80 transition-colors group"
             >
-              Se alla case
+              Läs mer om hur vi jobbar
               <ArrowRight
                 size={14}
                 className="transition-transform group-hover:translate-x-1"

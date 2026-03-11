@@ -8,6 +8,7 @@ import Process from './sections/Process';
 import PillarAgilIteration from './sections/PillarAgilIteration';
 import PillarSpecialistnatverk from './sections/PillarSpecialistnatverk';
 import PillarFlexiblaModeller from './sections/PillarFlexiblaModeller';
+import ContactPage from './sections/ContactPage';
 
 import Footer from './sections/Footer';
 
@@ -105,6 +106,9 @@ function App() {
           <Route path="/agilt-mindset" element={<PillarAgilIteration />} />
           <Route path="/partnerskap-och-natverk" element={<PillarSpecialistnatverk />} />
           <Route path="/avtalsformer" element={<PillarFlexiblaModeller />} />
+          
+          {/* Contact page */}
+          <Route path="/kontakt" element={<ContactPage />} />
           
           {/* 404 - redirect to home */}
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Linkedin, ExternalLink } from 'lucide-react';
+import { Mail, MapPin, Linkedin, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
@@ -20,20 +20,29 @@ const Footer = () => {
     ],
     omOss: [
       { label: 'Hur vi jobbar', href: '#process' },
-      { label: 'Agilt Mindset', href: '#' },
-      { label: 'Partnerskap', href: '#' },
-      { label: 'Avtalsformer', href: '#' },
+      { label: 'Agilt Mindset', href: '/agilt-mindset' },
+      { label: 'Partnerskap', href: '/partnerskap-och-natverk' },
+      { label: 'Avtalsformer', href: '/avtalsformer' },
     ],
   };
 
   const handleNavigate = (href: string) => {
     if (href.startsWith('#')) {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+      // If on home page, scroll to section
+      if (window.location.pathname === '/') {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        // Navigate to home page with hash and scroll to top first
+        navigate('/' + href);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } else {
+      // Navigate to new page and scroll to top
       navigate(href);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -61,15 +70,13 @@ const Footer = () => {
                 <Mail size={18} className="mr-2" />
                 Maila oss
               </a>
-              <a
-                href="https://calendly.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => handleNavigate('/kontakt')}
                 className="inline-flex items-center justify-center px-8 py-4 bg-white/10 text-white font-medium rounded-lg border border-white/20 transition-all duration-200 hover:bg-white/20"
               >
                 Boka ett möte
                 <ExternalLink size={16} className="ml-2" />
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -98,16 +105,13 @@ const Footer = () => {
                   <Mail size={16} />
                   hello@ascenddigital.tech
                 </a>
-                <a
-                  href="tel:+46701234567"
-                  className="flex items-center gap-3 text-sm text-white/60 hover:text-ascend-orange transition-colors"
-                >
-                  <Phone size={16} />
-                  +46 70 123 45 67
-                </a>
                 <div className="flex items-start gap-3 text-sm text-white/60">
                   <MapPin size={16} className="flex-shrink-0 mt-0.5" />
-                  <span>Stockholm, Sverige</span>
+                  <span>Harju maakond, Tallinn,<br />Kesklinna linnaosa,<br />Narva mnt 5, 10117, Estland</span>
+                </div>
+                <div className="flex items-start gap-3 text-sm text-white/60">
+                  <MapPin size={16} className="flex-shrink-0 mt-0.5" />
+                  <span>Regional bas: Barcelona, Katalonien</span>
                 </div>
               </div>
             </div>

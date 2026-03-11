@@ -1,21 +1,8 @@
-import { ArrowLeft, RefreshCw, Target, Clock, Users } from 'lucide-react';
+import { RefreshCw, Target, Clock, Users } from 'lucide-react';
 
 const PillarAgilIteration = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-ascend-black">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-ascend-black/95 backdrop-blur-md border-b border-ascend-gray-100 dark:border-ascend-gray-800">
-        <div className="container-wide px-6 h-16 flex items-center">
-          <button
-            onClick={() => window.history.back()}
-            className="inline-flex items-center gap-2 text-sm font-medium text-ascend-gray-600 dark:text-ascend-gray-400 hover:text-ascend-orange transition-colors"
-          >
-            <ArrowLeft size={16} />
-            Tillbaka
-          </button>
-        </div>
-      </header>
-
       {/* Hero Section */}
       <section className="pt-32 pb-16 section-padding">
         <div className="container-wide max-w-4xl">

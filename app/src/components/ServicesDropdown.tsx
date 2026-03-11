@@ -89,7 +89,9 @@ export function ServicesDropdown() {
         }
       }, 100);
     } else {
+      // Navigate to new page and scroll to top
       navigate(href);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [navigate]);
 
