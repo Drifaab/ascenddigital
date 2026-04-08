@@ -195,7 +195,7 @@ const ServiceAgileBizDev = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
 
             <button
-              onClick={() => navigate('/contact')}
+              onClick={() => navigate('/kontakt')}
               className="bg-white text-pink-600 hover:bg-white/90 px-8 py-4 rounded-full flex items-center justify-center gap-2"
             >
               Boka en tillväxtdiagnos

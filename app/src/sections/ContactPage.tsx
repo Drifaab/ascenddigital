@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import emailjs from '@emailjs/browser';
 import { Mail, MapPin, Send, CheckCircle, Building2, User, Briefcase, MessageSquare } from 'lucide-react';
 
 interface FormData {
@@ -29,27 +30,45 @@ const ContactPage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError(null);
 
-    // Create email content
-    const subject = encodeURIComponent(`Kontktförfrågan från ${formData.name} - ${formData.company}`);
-    const body = encodeURIComponent(
-      `Namn: ${formData.name}\n` +
-      `Företag: ${formData.company}\n` +
-      `E-post: ${formData.email}\n\n` +
-      `Meddelande:\n${formData.message}`
-    );
+    try {
+      // EmailJS configuration
+      // Du behöver skapa ett konto på https://www.emailjs.com/ och konfigurera:
+      // 1. En email service (t.ex. Gmail, Outlook, etc.)
+      // 2. En email template
+      // 3. Lägg till dessa värden i miljövariabler i Vercel
+      
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-    // Open email client
-    window.location.href = `mailto:hello@ascenddigital.tech?subject=${subject}&body=${body}`;
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS är inte konfigurerat. Kontakta administratören.');
+      }
 
-    // Show success message
-    setTimeout(() => {
-      setIsSubmitting(false);
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        company: formData.company,
+        message: formData.message,
+        to_email: 'hello@ascenddigital.tech',
+      };
+
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+
       setIsSubmitted(true);
-    }, 500);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitError(error instanceof Error ? error.message : 'Något gick fel. Försök igen senare.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
@@ -73,8 +92,8 @@ const ContactPage = () => {
             </p>
             
             <p className="text-ascend-gray-500 dark:text-ascend-gray-500 mb-10">
-              Ett email har öppnats i din standard email-klient. Om det inte fungerade, 
-              maila oss direkt på{' '}
+              Vi har mottagit ditt meddelande och återkommer inom 24 timmar.
+              Om du har brådskande frågor, maila oss direkt på{' '}
               <a href="mailto:hello@ascenddigital.tech" className="text-ascend-orange hover:underline">
                 hello@ascenddigital.tech
               </a>
@@ -144,6 +163,14 @@ const ContactPage = () => {
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Error Message */}
+                  {submitError && (
+                    <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+                      <p className="text-red-600 dark:text-red-400 text-sm">
+                        {submitError}
+                      </p>
+                    </div>
+                  )}
                   {/* Name & Company Row */}
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>

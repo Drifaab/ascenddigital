@@ -194,10 +194,17 @@ const Navigation = () => {
               onClick={handleLogoClick}
               className="flex items-center gap-2 transition-opacity hover:opacity-80"
             >
+              {/* Light mode logo */}
               <img
                 src="/images/Ascend Digital logo - full - jet black PNG_Rityta 1 (1).png"
                 alt="Ascend Digital"
-                className="h-8 md:h-10 w-auto dark:invert"
+                className="h-8 md:h-10 w-auto dark:hidden"
+              />
+              {/* Dark mode logo */}
+              <img
+                src="/images/Ascend Digital logo - full - maize PNG_Rityta 1 (1).png"
+                alt="Ascend Digital"
+                className="h-8 md:h-10 w-auto hidden dark:block"
               />
             </button>
 
