@@ -43,8 +43,17 @@ const ContactPage = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+const text = await response.text();
 
+console.log(text);
+
+let data;
+
+try {
+  data = JSON.parse(text);
+} catch {
+  throw new Error(text);
+}
       if (!response.ok) {
         throw new Error(data.error || 'Något gick fel. Försök igen senare.');
       }

@@ -60,6 +60,7 @@ ${message}`,
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Email error:', error);
-    return res.status(500).json({ error: 'Kunde inte skicka mejlet' });
-  }
+return res.status(500).json({
+  error: error.message,
+});  }
 };
