@@ -1,8 +1,5 @@
 {
   "framework": "vite",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "installCommand": "npm install",
   "rewrites": [
     { "source": "/tjanster/sem-seo-geo", "destination": "/index.html" },
     { "source": "/tjanster/paid-social", "destination": "/index.html" },

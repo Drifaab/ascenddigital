@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import emailjs from '@emailjs/browser';
 import { Mail, MapPin, Send, CheckCircle, Building2, User, Briefcase, MessageSquare } from 'lucide-react';
 
 interface FormData {
@@ -38,29 +37,17 @@ const ContactPage = () => {
     setSubmitError(null);
 
     try {
-      // EmailJS configuration
-      // Du behöver skapa ett konto på https://www.emailjs.com/ och konfigurera:
-      // 1. En email service (t.ex. Gmail, Outlook, etc.)
-      // 2. En email template
-      // 3. Lägg till dessa värden i miljövariabler i Vercel
-      
-      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error('EmailJS är inte konfigurerat. Kontakta administratören.');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Något gick fel. Försök igen senare.');
       }
-
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        company: formData.company,
-        message: formData.message,
-        to_email: 'hello@ascenddigital.tech',
-      };
-
-      await emailjs.send(serviceId, templateId, templateParams, publicKey);
 
       setIsSubmitted(true);
     } catch (error) {

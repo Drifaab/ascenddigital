@@ -182,15 +182,7 @@ const Footer = () => {
               {currentYear} Ascend Digital. Alla rättigheter förbehållna.
             </p>
             <div className="flex items-center gap-6">
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/40 hover:text-ascend-orange transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin size={20} />
-              </a>
+             
               <a
                 href="#"
                 className="text-sm text-white/40 hover:text-ascend-orange transition-colors"
